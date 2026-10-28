@@ -1,0 +1,39 @@
+Plan de ejecucion - PBRT V3
+Semilla: 20261025
+Repeticiones: 5
+Aceleradores: kdtree, bvh
+
+Repeticion 1:
+  1. Linux nativo con GCC
+  2. WSL2 (Linux)
+  3. Windows nativo
+  4. Linux nativo con variacion de nucleos
+  5. Maquina virtual Linux sobre Windows
+
+Repeticion 2:
+  1. WSL2 (Linux)
+  2. Linux nativo con GCC
+  3. Windows nativo
+  4. Maquina virtual Linux sobre Windows
+  5. Linux nativo con variacion de nucleos
+
+Repeticion 3:
+  1. Maquina virtual Linux sobre Windows
+  2. Windows nativo
+  3. Linux nativo con variacion de nucleos
+  4. Linux nativo con GCC
+  5. WSL2 (Linux)
+
+Repeticion 4:
+  1. Linux nativo con variacion de nucleos
+  2. Maquina virtual Linux sobre Windows
+  3. Linux nativo con GCC
+  4. WSL2 (Linux)
+  5. Windows nativo
+
+Repeticion 5:
+  1. Linux nativo con GCC
+  2. Linux nativo con variacion de nucleos
+  3. Maquina virtual Linux sobre Windows
+  4. WSL2 (Linux)
+  5. Windows nativo

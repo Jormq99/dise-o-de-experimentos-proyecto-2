@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import argparse
 import re
 import random
 import subprocess
@@ -15,6 +16,7 @@ PBRT_DIR = REPOS_DIR / "pbrt-v3"
 PBRT_EXE = PBRT_DIR / "build" / "Release" / "pbrt.exe"
 RESULTS_DIR = SCRIPT_DIR.parent / "resultados"
 
+# Las 4 escenas oficiales requeridas por el diseño experimental
 RENDERS = (
     (
         Path("scenes/test_scenes/dragon/f8-10.pbrt"),
@@ -32,10 +34,6 @@ RENDERS = (
         Path("scenes/test_scenes/dragon/f9-3.pbrt"),
         "f9-3.exr",
     ),
-    (
-        Path("scenes/test_scenes/bathroom/bathroom.pbrt"),
-        "bathroom.exr",
-    ),
 )
 
 PBRT_ERROR = re.compile(r"\bError:", re.IGNORECASE)
@@ -43,11 +41,11 @@ PBRT_WARNING = re.compile(r"\bWarning:", re.IGNORECASE)
 PBRT_STATISTICS = re.compile(r"^\s*Statistics:\s*$")
 
 
-def create_report():
+def create_report(accelerator: str):
     RESULTS_DIR.mkdir(parents=True, exist_ok=True)
     number = 1
     while True:
-        report_path = RESULTS_DIR / f"tiempos_windows_{number}.txt"
+        report_path = RESULTS_DIR / f"tiempos_windows_{accelerator}_{number}.txt"
         try:
             return report_path, report_path.open(
                 "x", encoding="utf-8", newline="\n"
@@ -62,7 +60,41 @@ def write_both(report, message: str) -> None:
     report.flush()
 
 
+def patch_scene_accelerator(scene_path: Path, accelerator: str) -> Path:
+    """
+    Crea una copia temporal de la escena inyectando o reemplazando 
+    la directiva Accelerator para configurarla por código.
+    """
+    content = scene_path.read_text(encoding="utf-8", errors="replace")
+    
+    # Buscar si ya existe la directiva Accelerator en el archivo
+    if re.search(r'^\s*Accelerator\s+', content, re.MULTILINE):
+        new_content = re.sub(
+            r'^\s*Accelerator\s+".*?"', 
+            f'Accelerator "{accelerator}"', 
+            content, 
+            flags=re.MULTILINE
+        )
+    else:
+        # Si no existe, se inyecta al inicio del archivo .pbrt
+        new_content = f'Accelerator "{accelerator}"\n' + content
+
+    temp_scene_path = scene_path.with_name(f"{scene_path.stem}_{accelerator}{scene_path.suffix}")
+    temp_scene_path.write_text(new_content, encoding="utf-8")
+    return temp_scene_path
+
+
 def main() -> int:
+    parser = argparse.ArgumentParser(description="Ejecutor de renders PBRT para Windows.")
+    parser.add_argument(
+        "--accelerator", 
+        choices=["bvh", "kdtree"], 
+        default="bvh", 
+        help="Estructura de aceleración a utilizar."
+    )
+    args = parser.parse_args()
+    accelerator = args.accelerator
+
     renders = list(RENDERS)
     random.shuffle(renders)
 
@@ -78,14 +110,17 @@ def main() -> int:
         return 1
 
     try:
-        report_path, report = create_report()
+        report_path, report = create_report(accelerator)
     except OSError as exc:
         print(f"No se pudo crear el archivo de resultados: {exc}", file=sys.stderr)
         return 1
 
     failures = 0
+    temp_scenes_created = []
+
     with report:
-        write_both(report, "REPORTE DE RENDERS PBRT")
+        write_both(report, "REPORTE DE RENDERS PBRT - WINDOWS NATIVO")
+        write_both(report, f"Acelerador configurado: {accelerator.upper()}")
         write_both(report, f"Inicio: {datetime.now().astimezone().isoformat(timespec='seconds')}")
         write_both(report, f"Directorio de trabajo: {PBRT_DIR}")
         write_both(report, f"Archivo de resultados: {report_path}")
@@ -95,11 +130,18 @@ def main() -> int:
         write_both(report, "")
 
         for index, (scene, output_name) in enumerate(renders, start=1):
-            command = [str(PBRT_EXE), str(scene)]
+            full_scene_path = PBRT_DIR / scene
+            # Preparar la escena con el acelerador dinámico
+            active_scene_path = patch_scene_accelerator(full_scene_path, accelerator)
+            temp_scenes_created.append(active_scene_path)
+            
+            rel_scene_arg = active_scene_path.relative_to(PBRT_DIR)
+            command = [str(PBRT_EXE), str(rel_scene_arg)]
+            
             write_both(report, "=" * 78)
-            write_both(report, f"RENDER {index} DE {len(renders)}: {output_name}")
-            write_both(report, f"Escena: {scene}")
-            write_both(report, f"Comando: .\\build\\Release\\pbrt.exe {scene.as_posix().replace('/', chr(92))}")
+            write_both(report, f"RENDER {index} DE {len(renders)}: {output_name} [{accelerator.upper()}]")
+            write_both(report, f"Escena base: {scene}")
+            write_both(report, f"Comando: .\\build\\Release\\pbrt.exe {rel_scene_arg.as_posix().replace('/', chr(92))}")
             write_both(report, f"Inicio: {datetime.now().astimezone().isoformat(timespec='seconds')}")
             print("Salida de PBRT (el progreso no se guarda en el reporte):", flush=True)
             report.flush()
@@ -169,6 +211,13 @@ def main() -> int:
         write_both(report, f"Renders correctos: {len(renders) - failures} de {len(renders)}")
         write_both(report, f"Renders con errores: {failures}")
         write_both(report, f"Fin: {datetime.now().astimezone().isoformat(timespec='seconds')}")
+
+    # Limpiar archivos temporales generados
+    for temp_scene in temp_scenes_created:
+        try:
+            temp_scene.unlink()
+        except OSError:
+            pass
 
     print(f"\nResultados guardados en: {report_path}")
     return 1 if failures else 0

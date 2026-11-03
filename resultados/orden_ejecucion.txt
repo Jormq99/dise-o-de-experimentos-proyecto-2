@@ -1,39 +1,60 @@
-Plan de ejecucion - PBRT V3
-Semilla: 20261025
-Repeticiones: 5
-Aceleradores: kdtree, bvh
+Plan de Ejecucion Experimental - PBRT V3
+Semilla de aleatorizacion: 20261025
+Repeticiones por tratamiento: 5
+Secuencia de aceleradores por corrida: bvh, kdtree
+Total de escenarios base de infraestructura/compilador: 9
 
-Repeticion 1:
-  1. Linux nativo con GCC
-  2. WSL2 (Linux)
-  3. Windows nativo
-  4. Linux nativo con variacion de nucleos
-  5. Maquina virtual Linux sobre Windows
+--- Repeticion 1 ---
+  1. Entorno: Linux nativo con Clang | Orden de aceleradores: bvh -> kdtree
+  2. Entorno: WSL 2 con Clang | Orden de aceleradores: kdtree -> bvh
+  3. Entorno: Windows nativo (MSVC) | Orden de aceleradores: bvh -> kdtree
+  4. Entorno: WSL 2 con GCC | Orden de aceleradores: kdtree -> bvh
+  5. Entorno: Hyper-V (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  6. Entorno: Linux nativo con GCC | Orden de aceleradores: kdtree -> bvh
+  7. Entorno: VirtualBox (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  8. Entorno: VirtualBox (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
+  9. Entorno: Hyper-V (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
 
-Repeticion 2:
-  1. WSL2 (Linux)
-  2. Linux nativo con GCC
-  3. Windows nativo
-  4. Maquina virtual Linux sobre Windows
-  5. Linux nativo con variacion de nucleos
+--- Repeticion 2 ---
+  1. Entorno: VirtualBox (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
+  2. Entorno: Linux nativo con Clang | Orden de aceleradores: bvh -> kdtree
+  3. Entorno: WSL 2 con GCC | Orden de aceleradores: bvh -> kdtree
+  4. Entorno: Hyper-V (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  5. Entorno: Hyper-V (Linux) con Clang | Orden de aceleradores: kdtree -> bvh
+  6. Entorno: Windows nativo (MSVC) | Orden de aceleradores: bvh -> kdtree
+  7. Entorno: WSL 2 con Clang | Orden de aceleradores: kdtree -> bvh
+  8. Entorno: VirtualBox (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  9. Entorno: Linux nativo con GCC | Orden de aceleradores: bvh -> kdtree
 
-Repeticion 3:
-  1. Maquina virtual Linux sobre Windows
-  2. Windows nativo
-  3. Linux nativo con variacion de nucleos
-  4. Linux nativo con GCC
-  5. WSL2 (Linux)
+--- Repeticion 3 ---
+  1. Entorno: Hyper-V (Linux) con GCC | Orden de aceleradores: bvh -> kdtree
+  2. Entorno: WSL 2 con GCC | Orden de aceleradores: kdtree -> bvh
+  3. Entorno: Windows nativo (MSVC) | Orden de aceleradores: kdtree -> bvh
+  4. Entorno: Linux nativo con GCC | Orden de aceleradores: kdtree -> bvh
+  5. Entorno: VirtualBox (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
+  6. Entorno: WSL 2 con Clang | Orden de aceleradores: kdtree -> bvh
+  7. Entorno: Linux nativo con Clang | Orden de aceleradores: kdtree -> bvh
+  8. Entorno: VirtualBox (Linux) con GCC | Orden de aceleradores: bvh -> kdtree
+  9. Entorno: Hyper-V (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
 
-Repeticion 4:
-  1. Linux nativo con variacion de nucleos
-  2. Maquina virtual Linux sobre Windows
-  3. Linux nativo con GCC
-  4. WSL2 (Linux)
-  5. Windows nativo
+--- Repeticion 4 ---
+  1. Entorno: Windows nativo (MSVC) | Orden de aceleradores: kdtree -> bvh
+  2. Entorno: Linux nativo con GCC | Orden de aceleradores: bvh -> kdtree
+  3. Entorno: Hyper-V (Linux) con Clang | Orden de aceleradores: kdtree -> bvh
+  4. Entorno: Hyper-V (Linux) con GCC | Orden de aceleradores: bvh -> kdtree
+  5. Entorno: VirtualBox (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  6. Entorno: Linux nativo con Clang | Orden de aceleradores: kdtree -> bvh
+  7. Entorno: WSL 2 con GCC | Orden de aceleradores: bvh -> kdtree
+  8. Entorno: WSL 2 con Clang | Orden de aceleradores: bvh -> kdtree
+  9. Entorno: VirtualBox (Linux) con Clang | Orden de aceleradores: bvh -> kdtree
 
-Repeticion 5:
-  1. Linux nativo con GCC
-  2. Linux nativo con variacion de nucleos
-  3. Maquina virtual Linux sobre Windows
-  4. WSL2 (Linux)
-  5. Windows nativo
+--- Repeticion 5 ---
+  1. Entorno: VirtualBox (Linux) con Clang | Orden de aceleradores: kdtree -> bvh
+  2. Entorno: Windows nativo (MSVC) | Orden de aceleradores: bvh -> kdtree
+  3. Entorno: WSL 2 con Clang | Orden de aceleradores: kdtree -> bvh
+  4. Entorno: VirtualBox (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  5. Entorno: Linux nativo con Clang | Orden de aceleradores: kdtree -> bvh
+  6. Entorno: Hyper-V (Linux) con GCC | Orden de aceleradores: kdtree -> bvh
+  7. Entorno: Linux nativo con GCC | Orden de aceleradores: kdtree -> bvh
+  8. Entorno: WSL 2 con GCC | Orden de aceleradores: kdtree -> bvh
+  9. Entorno: Hyper-V (Linux) con Clang | Orden de aceleradores: bvh -> kdtree

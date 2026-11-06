@@ -19,8 +19,12 @@ RESULTS_DIR = SCRIPT_DIR.parent / "resultados"
 # Las 4 escenas oficiales requeridas por el diseño experimental
 RENDERS = (
     (
-        Path("scenes/test_scenes/dragon/f8-10.pbrt"),
-        "f8-10.exr",
+        Path("scenes/test_scenes/dragon/f15-13.pbrt"),
+        "f15-13.exr",
+    ),
+    (
+        Path("scenes/test_scenes/dragon/f8-4b.pbrt"),
+        "f8-4b.exr",
     ),
     (
         Path("scenes/test_scenes/dragon/f8-4a.pbrt"),
@@ -29,10 +33,6 @@ RENDERS = (
     (
         Path("scenes/test_scenes/dragon/f9-3.pbrt"),
         "f9-3.exr",
-    ),
-    (
-        Path("scenes/test_scenes/barcelona-pavilion/pavilion-night.pbrt"), 
-        "pavilion-night.exr",
     ),
 )
 

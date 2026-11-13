@@ -1,0 +1,435 @@
+REPORTE DE RENDERS PBRT - HYPER-V
+Acelerador configurado: BVH
+Compilador seleccionado: CLANG
+Compilador CMake: Clang (/usr/bin/clang++)
+Sistema operativo: Ubuntu 26.04.1 LTS
+Virtualizacion: Virtual Machine 
+Kernel/plataforma: Linux-7.0.0-42-generic-x86_64-with-glibc2.43
+Inicio: 2026-11-13T08:09:07-06:00
+Evidencia date: Fri Nov 13 08:09:07 AM CST 2026
+Directorio de trabajo: /mnt/repos/pbrt-v3
+Ejecutable PBRT: /home/jor/pbrt-hyperv-build/build-hyperv-clang/pbrt
+Archivo de resultados: /mnt/repos/repo_diseño/resultados/tiempos_hyperv_clang_bvh_3.txt
+Repeticiones por escena: 1
+Total de renders planificados: 4
+
+REPETICION 1 DE 1
+Orden aleatorio de esta repeticion:
+  1. scenes/test_scenes/dragon/f8-4a.pbrt
+  2. scenes/test_scenes/dragon/f8-4b.pbrt
+  3. scenes/test_scenes/dragon/f15-13.pbrt
+  4. scenes/test_scenes/dragon/f9-3.pbrt
+==============================================================================
+REPETICION 1: RENDER 1 DE 4 f8-4a.exr [BVH + CLANG]
+Identificador unico de corrida: cc437c26-b30f-40da-b5b2-f5ee354abd3a
+Escena base: scenes/test_scenes/dragon/f8-4a.pbrt
+Comando: /home/jor/pbrt-hyperv-build/build-hyperv-clang/pbrt scenes/test_scenes/dragon/f8-4a_clang_bvh_5128.pbrt
+Inicio: 2026-11-13T08:09:07-06:00
+Evidencia date: Fri Nov 13 08:09:07 AM CST 2026
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  BVH
+    Interior nodes                                                1843593
+    Leaf nodes                                                    1843594
+    Primitives per leaf node                       1848604 /      1843594 (1.00x)
+  Integrator
+    Camera rays traced                                         1310720000
+    Path length                                                     1.403 avg [range 0 - 10]
+    Zero-radiance paths                          166273011 /   1125598423 (14.77%)
+  Intersections
+    Regular ray intersection tests                             4194197933
+    Shadow ray intersection tests                               809003090
+    Ray-triangle intersection tests             2408201386 /   8220796176 (29.29%)
+  Memory
+    BVH tree                                                       140.73 MiB
+    Film pixels                                                     19.53 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          2333050486
+  Profile
+    Integrator::Render()                                            99.96% (   0:05:21.78)
+      Camera::GenerateRay[Differential]()                            1.93% (   0:00:06.21)
+      Film::AddSample()                                              1.02% (   0:00:03.29)
+      Film::MergeTile()                                              0.00% (   0:00:00.00)
+      Sampler::GetSample[12]D()                                      2.73% (   0:00:08.77)
+      Sampler::StartPixelSample()                                    0.00% (   0:00:00.00)
+      SamplerIntegrator::Li()                                       93.00% (   0:04:59.37)
+        Accelerator::Intersect()                                    38.24% (   0:02:03.10)
+          Triangle::Intersect()                                      8.71% (   0:00:28.03)
+        BSDF::Sample_f()                                             5.31% (   0:00:17.08)
+        Direct lighting                                             41.84% (   0:02:14.69)
+          Accelerator::Intersect()                                   9.90% (   0:00:31.86)
+            Triangle::Intersect()                                    1.59% (   0:00:05.13)
+          Accelerator::IntersectP()                                  7.69% (   0:00:24.76)
+            Triangle::IntersectP()                                   1.11% (   0:00:03.58)
+          BSDF::PDF()                                                0.77% (   0:00:02.46)
+          BSDF::Sample_f()                                           5.08% (   0:00:16.34)
+          BSDF::f()                                                  1.55% (   0:00:04.97)
+          Light::Pdf()                                               2.33% (   0:00:07.49)
+          Light::Sample_*()                                          8.22% (   0:00:26.47)
+            MIPMap::Lookup() (trilinear)                             1.66% (   0:00:05.35)
+          MIPMap::Lookup() (trilinear)                               1.54% (   0:00:04.96)
+          Sampler::GetSample[12]D()                                  2.03% (   0:00:06.53)
+        MIPMap::Lookup() (trilinear)                                 0.54% (   0:00:01.74)
+        Material::ComputeScatteringFunctions()                       1.61% (   0:00:05.18)
+        Sampler::GetSample[12]D()                                    1.55% (   0:00:04.99)
+    Scene parsing and creation                                       0.04% (   0:00:00.13)
+      Acceleration structure creation                                0.02% (   0:00:00.06)
+      MIP map generation                                             0.00% (   0:00:00.00)
+      MIPMap::Lookup() (trilinear)                                   0.00% (   0:00:00.00)
+      Texture loading                                                0.00% (   0:00:00.00)
+        MIP map generation                                           0.00% (   0:00:00.00)
+  Profile (flattened)
+    Accelerator::Intersect()                                        37.84% (   0:02:01.79)
+    BSDF::Sample_f()                                                10.39% (   0:00:33.43)
+    Triangle::Intersect()                                           10.30% (   0:00:33.16)
+    Accelerator::IntersectP()                                        6.58% (   0:00:21.18)
+    Light::Sample_*()                                                6.56% (   0:00:21.11)
+    Sampler::GetSample[12]D()                                        6.31% (   0:00:20.30)
+    SamplerIntegrator::Li()                                          3.90% (   0:00:12.57)
+    MIPMap::Lookup() (trilinear)                                     3.75% (   0:00:12.08)
+    Direct lighting                                                  2.73% (   0:00:08.78)
+    Light::Pdf()                                                     2.33% (   0:00:07.49)
+    Camera::GenerateRay[Differential]()                              1.93% (   0:00:06.21)
+    Material::ComputeScatteringFunctions()                           1.61% (   0:00:05.18)
+    BSDF::f()                                                        1.55% (   0:00:04.97)
+    Integrator::Render()                                             1.28% (   0:00:04.11)
+    Triangle::IntersectP()                                           1.11% (   0:00:03.58)
+    Film::AddSample()                                                1.02% (   0:00:03.29)
+    BSDF::PDF()                                                      0.77% (   0:00:02.46)
+    Acceleration structure creation                                  0.02% (   0:00:00.06)
+    Scene parsing and creation                                       0.02% (   0:00:00.04)
+    Sampler::StartPixelSample()                                      0.00% (   0:00:00.00)
+    MIP map generation                                               0.00% (   0:00:00.00)
+    Film::MergeTile()                                                0.00% (   0:00:00.00)
+    Texture loading                                                  0.00% (   0:00:00.00)
+
+Tiempo total: 361.9 segundos (6.03 minutos)
+Evidencia date fin: Fri Nov 13 08:14:29 AM CST 2026
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: /mnt/repos/pbrt-v3/f8-4a.exr
+
+==============================================================================
+REPETICION 1: RENDER 2 DE 4 f8-4b.exr [BVH + CLANG]
+Identificador unico de corrida: 2e38a5f7-84cd-4bc0-a875-0af9da5cae80
+Escena base: scenes/test_scenes/dragon/f8-4b.pbrt
+Comando: /home/jor/pbrt-hyperv-build/build-hyperv-clang/pbrt scenes/test_scenes/dragon/f8-4b_clang_bvh_5128.pbrt
+Inicio: 2026-11-13T08:14:29-06:00
+Evidencia date: Fri Nov 13 08:14:29 AM CST 2026
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  BVH
+    Interior nodes                                                1843593
+    Leaf nodes                                                    1843594
+    Primitives per leaf node                       1848604 /      1843594 (1.00x)
+  Integrator
+    Camera rays traced                                         2621440000
+    Path length                                                     1.410 avg [range 0 - 22]
+    Zero-radiance paths                          429990850 /   2167859770 (19.83%)
+  Intersections
+    Regular ray intersection tests                             8325582789
+    Shadow ray intersection tests                              1558113895
+    Ray-triangle intersection tests             5905887452 /  18641579163 (31.68%)
+  Memory
+    BVH tree                                                       140.73 MiB
+    Film pixels                                                     19.53 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          3883196058
+  Profile
+    Integrator::Render()                                            99.98% (   0:12:58.81)
+      Camera::GenerateRay[Differential]()                            1.58% (   0:00:12.33)
+      Film::AddSample()                                              0.95% (   0:00:07.40)
+      Film::MergeTile()                                              0.00% (   0:00:00.00)
+      Sampler::GetSample[12]D()                                      2.26% (   0:00:17.63)
+      Sampler::StartPixelSample()                                    0.00% (   0:00:00.00)
+      SamplerIntegrator::Li()                                       94.14% (   0:12:13.28)
+        Accelerator::Intersect()                                    44.12% (   0:05:43.68)
+          Triangle::Intersect()                                     10.07% (   0:01:18.43)
+        BSDF::Sample_f()                                             5.01% (   0:00:39.00)
+        Direct lighting                                             38.42% (   0:04:59.26)
+          Accelerator::Intersect()                                  10.57% (   0:01:22.31)
+            Triangle::Intersect()                                    1.84% (   0:00:14.30)
+          Accelerator::IntersectP()                                  7.45% (   0:00:58.05)
+            Triangle::IntersectP()                                   1.17% (   0:00:09.11)
+          BSDF::PDF()                                                0.62% (   0:00:04.82)
+          BSDF::Sample_f()                                           4.14% (   0:00:32.23)
+          BSDF::f()                                                  1.26% (   0:00:09.83)
+          Light::Pdf()                                               2.07% (   0:00:16.14)
+          Light::Sample_*()                                          7.15% (   0:00:55.65)
+            MIPMap::Lookup() (trilinear)                             1.47% (   0:00:11.43)
+          MIPMap::Lookup() (trilinear)                               1.25% (   0:00:09.77)
+          Sampler::GetSample[12]D()                                  1.69% (   0:00:13.15)
+        MIPMap::Lookup() (trilinear)                                 0.20% (   0:00:01.59)
+        Material::ComputeScatteringFunctions()                       1.75% (   0:00:13.64)
+        Sampler::GetSample[12]D()                                    1.62% (   0:00:12.61)
+    Scene parsing and creation                                       0.02% (   0:00:00.13)
+      Acceleration structure creation                                0.01% (   0:00:00.06)
+      MIP map generation                                             0.00% (   0:00:00.00)
+      MIPMap::Lookup() (trilinear)                                   0.00% (   0:00:00.00)
+      Texture loading                                                0.00% (   0:00:00.00)
+        MIP map generation                                           0.00% (   0:00:00.00)
+  Profile (flattened)
+    Accelerator::Intersect()                                        42.78% (   0:05:33.26)
+    Triangle::Intersect()                                           11.91% (   0:01:32.74)
+    BSDF::Sample_f()                                                 9.15% (   0:01:11.24)
+    Accelerator::IntersectP()                                        6.28% (   0:00:48.93)
+    Light::Sample_*()                                                5.68% (   0:00:44.22)
+    Sampler::GetSample[12]D()                                        5.57% (   0:00:43.39)
+    SamplerIntegrator::Li()                                          3.01% (   0:00:23.46)
+    MIPMap::Lookup() (trilinear)                                     2.93% (   0:00:22.81)
+    Direct lighting                                                  2.22% (   0:00:17.27)
+    Light::Pdf()                                                     2.07% (   0:00:16.14)
+    Material::ComputeScatteringFunctions()                           1.75% (   0:00:13.64)
+    Camera::GenerateRay[Differential]()                              1.58% (   0:00:12.33)
+    BSDF::f()                                                        1.26% (   0:00:09.83)
+    Triangle::IntersectP()                                           1.17% (   0:00:09.11)
+    Integrator::Render()                                             1.05% (   0:00:08.14)
+    Film::AddSample()                                                0.95% (   0:00:07.40)
+    BSDF::PDF()                                                      0.62% (   0:00:04.82)
+    Acceleration structure creation                                  0.01% (   0:00:00.06)
+    Scene parsing and creation                                       0.01% (   0:00:00.05)
+    Sampler::StartPixelSample()                                      0.00% (   0:00:00.00)
+    Film::MergeTile()                                                0.00% (   0:00:00.00)
+    MIP map generation                                               0.00% (   0:00:00.00)
+    Texture loading                                                  0.00% (   0:00:00.00)
+
+Tiempo total: 779.0 segundos (12.98 minutos)
+Evidencia date fin: Fri Nov 13 08:27:28 AM CST 2026
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: /mnt/repos/pbrt-v3/f8-4b.exr
+
+==============================================================================
+REPETICION 1: RENDER 3 DE 4 f15-13.exr [BVH + CLANG]
+Identificador unico de corrida: 450a14a6-7f09-4e28-b966-8c38a7e9d466
+Escena base: scenes/test_scenes/dragon/f15-13.pbrt
+Comando: /home/jor/pbrt-hyperv-build/build-hyperv-clang/pbrt scenes/test_scenes/dragon/f15-13_clang_bvh_5128.pbrt
+Inicio: 2026-11-13T08:27:28-06:00
+Evidencia date: Fri Nov 13 08:27:28 AM CST 2026
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  BVH
+    Interior nodes                                                3687186
+    Leaf nodes                                                    3687187
+    Primitives per leaf node                       3697206 /      3687187 (1.00x)
+  Integrator
+    Camera rays traced                                         4478976000
+    Path length                                                     1.183 avg [range 0 - 2]
+    Zero-radiance paths                         1390604357 /   5423225441 (25.64%)
+  Intersections
+    Regular ray intersection tests                            18316637053
+    Shadow ray intersection tests                              4008138754
+    Ray-triangle intersection tests            11521670991 /  50580529472 (22.78%)
+  Memory
+    BVH tree                                                       281.46 MiB
+    Film pixels                                                     33.37 MiB
+    Primitives                                                     253.87 MiB
+    Texture MIP maps                                                 8.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                289.13 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                3697206
+    Probes per TransformCache lookup                                1.000 avg [range 1 - 1]
+    TransformCache hits                                  1 /            8 (12.50%)
+    Triangles per triangle mesh                    3697206 /            3 (1232402.00x)
+  Texture
+    Trilinear lookups                                         10033001752
+  Profile
+    Integrator::Render()                                            99.99% (   0:36:24.97)
+      Camera::GenerateRay[Differential]()                            0.92% (   0:00:20.04)
+      Film::AddSample()                                              0.58% (   0:00:12.65)
+      Film::MergeTile()                                              0.00% (   0:00:00.00)
+      Sampler::GetSample[12]D()                                      1.33% (   0:00:29.15)
+      Sampler::StartPixelSample()                                    0.00% (   0:00:00.00)
+      SamplerIntegrator::Li()                                       96.53% (   0:35:09.47)
+        Accelerator::Intersect()                                    19.00% (   0:06:55.29)
+          Triangle::Intersect()                                      3.85% (   0:01:24.04)
+        BSDF::Sample_f()                                             2.70% (   0:00:59.10)
+        BSSRDF::Sample_f()                                           0.07% (   0:00:01.56)
+        BSSRDF::f()                                                 17.70% (   0:06:26.76)
+          BSSRDF::Sample_f()                                        17.70% (   0:06:26.76)
+            Accelerator::Intersect()                                14.39% (   0:05:14.53)
+              Triangle::Intersect()                                  2.57% (   0:00:56.20)
+        Direct lighting                                             53.85% (   0:19:36.71)
+          Accelerator::Intersect()                                  22.32% (   0:08:07.64)
+            Triangle::Intersect()                                    3.78% (   0:01:22.62)
+          Accelerator::IntersectP()                                 11.78% (   0:04:17.43)
+            Triangle::IntersectP()                                   1.77% (   0:00:38.59)
+          BSDF::PDF()                                                0.33% (   0:00:07.16)
+          BSDF::Sample_f()                                           2.78% (   0:01:00.69)
+          BSDF::f()                                                  0.53% (   0:00:11.50)
+          Light::Pdf()                                               2.90% (   0:01:03.39)
+          Light::Sample_*()                                          7.79% (   0:02:50.21)
+            MIPMap::Lookup() (trilinear)                             1.63% (   0:00:35.53)
+          MIPMap::Lookup() (trilinear)                               1.29% (   0:00:28.14)
+          Sampler::GetSample[12]D()                                  1.81% (   0:00:39.48)
+        Material::ComputeScatteringFunctions()                       0.81% (   0:00:17.60)
+        Sampler::GetSample[12]D()                                    0.81% (   0:00:17.78)
+    Scene parsing and creation                                       0.01% (   0:00:00.25)
+      Acceleration structure creation                                0.01% (   0:00:00.14)
+      MIP map generation                                             0.00% (   0:00:00.00)
+      MIPMap::Lookup() (trilinear)                                   0.00% (   0:00:00.00)
+  Profile (flattened)
+    Accelerator::Intersect()                                        45.51% (   0:16:34.59)
+    Triangle::Intersect()                                           10.20% (   0:03:42.88)
+    Accelerator::IntersectP()                                       10.01% (   0:03:38.84)
+    Light::Sample_*()                                                6.16% (   0:02:14.68)
+    BSDF::Sample_f()                                                 5.48% (   0:01:59.79)
+    Sampler::GetSample[12]D()                                        3.96% (   0:01:26.42)
+    BSSRDF::Sample_f()                                               3.38% (   0:01:13.79)
+    MIPMap::Lookup() (trilinear)                                     2.91% (   0:01:03.67)
+    Light::Pdf()                                                     2.90% (   0:01:03.39)
+    Direct lighting                                                  2.34% (   0:00:51.03)
+    Triangle::IntersectP()                                           1.77% (   0:00:38.59)
+    SamplerIntegrator::Li()                                          1.59% (   0:00:34.64)
+    Camera::GenerateRay[Differential]()                              0.92% (   0:00:20.04)
+    Material::ComputeScatteringFunctions()                           0.81% (   0:00:17.60)
+    Integrator::Render()                                             0.62% (   0:00:13.63)
+    Film::AddSample()                                                0.58% (   0:00:12.65)
+    BSDF::f()                                                        0.53% (   0:00:11.50)
+    BSDF::PDF()                                                      0.33% (   0:00:07.16)
+    Acceleration structure creation                                  0.01% (   0:00:00.14)
+    Scene parsing and creation                                       0.01% (   0:00:00.11)
+    Sampler::StartPixelSample()                                      0.00% (   0:00:00.00)
+    Film::MergeTile()                                                0.00% (   0:00:00.00)
+    MIP map generation                                               0.00% (   0:00:00.00)
+
+Tiempo total: 2185.3 segundos (36.42 minutos)
+Evidencia date fin: Fri Nov 13 09:03:53 AM CST 2026
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: /mnt/repos/pbrt-v3/f15-13.exr
+
+==============================================================================
+REPETICION 1: RENDER 4 DE 4 f9-3.exr [BVH + CLANG]
+Identificador unico de corrida: 9e0baf21-ccc5-461a-879c-aa7f04de5a3e
+Escena base: scenes/test_scenes/dragon/f9-3.pbrt
+Comando: /home/jor/pbrt-hyperv-build/build-hyperv-clang/pbrt scenes/test_scenes/dragon/f9-3_clang_bvh_5128.pbrt
+Inicio: 2026-11-13T09:03:53-06:00
+Evidencia date: Fri Nov 13 09:03:53 AM CST 2026
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  BVH
+    Interior nodes                                                1843593
+    Leaf nodes                                                    1843594
+    Primitives per leaf node                       1848604 /      1843594 (1.00x)
+  Integrator
+    Camera rays traced                                          829440000
+    Path length                                                     1.345 avg [range 0 - 20]
+    Zero-radiance paths                          350354930 /   1207119924 (29.02%)
+  Intersections
+    Regular ray intersection tests                             3086652991
+    Shadow ray intersection tests                               727053392
+    Ray-triangle intersection tests             1902143113 /   8206604431 (23.18%)
+  Memory
+    BVH tree                                                       140.73 MiB
+    Film pixels                                                     24.72 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   2
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          1957941688
+  Profile
+    Integrator::Render()                                            99.96% (   0:05:30.77)
+      Camera::GenerateRay[Differential]()                            1.18% (   0:00:03.91)
+      Film::AddSample()                                              0.70% (   0:00:02.32)
+      Film::MergeTile()                                              0.00% (   0:00:00.00)
+      Sampler::GetSample[12]D()                                      1.61% (   0:00:05.32)
+      Sampler::StartPixelSample()                                    0.00% (   0:00:00.00)
+      SamplerIntegrator::Li()                                       95.69% (   0:05:16.63)
+        Accelerator::Intersect()                                    25.82% (   0:01:25.43)
+          Triangle::Intersect()                                      5.55% (   0:00:18.37)
+        BSDF::Sample_f()                                             5.65% (   0:00:18.69)
+        Direct lighting                                             60.14% (   0:03:19.01)
+          Accelerator::Intersect()                                  21.05% (   0:01:09.66)
+            Triangle::Intersect()                                    3.57% (   0:00:11.82)
+          Accelerator::IntersectP()                                 12.01% (   0:00:39.72)
+            Triangle::IntersectP()                                   1.82% (   0:00:06.01)
+          BSDF::PDF()                                                0.78% (   0:00:02.59)
+          BSDF::Sample_f()                                           5.73% (   0:00:18.94)
+          BSDF::f()                                                  1.47% (   0:00:04.85)
+          Light::Pdf()                                               3.07% (   0:00:10.16)
+          Light::Sample_*()                                          9.22% (   0:00:30.51)
+            MIPMap::Lookup() (trilinear)                             1.88% (   0:00:06.22)
+          MIPMap::Lookup() (trilinear)                               1.60% (   0:00:05.29)
+          Sampler::GetSample[12]D()                                  2.28% (   0:00:07.55)
+        Material::ComputeScatteringFunctions()                       1.16% (   0:00:03.83)
+        Sampler::GetSample[12]D()                                    0.88% (   0:00:02.90)
+    Scene parsing and creation                                       0.04% (   0:00:00.12)
+      Acceleration structure creation                                0.02% (   0:00:00.07)
+      MIP map generation                                             0.00% (   0:00:00.00)
+      MIPMap::Lookup() (trilinear)                                   0.00% (   0:00:00.00)
+      Texture loading                                                0.00% (   0:00:00.00)
+        MIP map generation                                           0.00% (   0:00:00.00)
+  Profile (flattened)
+    Accelerator::Intersect()                                        37.75% (   0:02:04.89)
+    BSDF::Sample_f()                                                11.38% (   0:00:37.64)
+    Accelerator::IntersectP()                                       10.19% (   0:00:33.71)
+    Triangle::Intersect()                                            9.13% (   0:00:30.19)
+    Light::Sample_*()                                                7.34% (   0:00:24.29)
+    Sampler::GetSample[12]D()                                        4.77% (   0:00:15.78)
+    MIPMap::Lookup() (trilinear)                                     3.48% (   0:00:11.52)
+    Light::Pdf()                                                     3.07% (   0:00:10.16)
+    Direct lighting                                                  2.93% (   0:00:09.69)
+    SamplerIntegrator::Li()                                          2.04% (   0:00:06.75)
+    Triangle::IntersectP()                                           1.82% (   0:00:06.01)
+    BSDF::f()                                                        1.47% (   0:00:04.85)
+    Camera::GenerateRay[Differential]()                              1.18% (   0:00:03.91)
+    Material::ComputeScatteringFunctions()                           1.16% (   0:00:03.83)
+    BSDF::PDF()                                                      0.78% (   0:00:02.59)
+    Integrator::Render()                                             0.78% (   0:00:02.56)
+    Film::AddSample()                                                0.70% (   0:00:02.32)
+    Acceleration structure creation                                  0.02% (   0:00:00.07)
+    Scene parsing and creation                                       0.02% (   0:00:00.05)
+    Sampler::StartPixelSample()                                      0.00% (   0:00:00.00)
+    MIP map generation                                               0.00% (   0:00:00.00)
+    Film::MergeTile()                                                0.00% (   0:00:00.00)
+    Texture loading                                                  0.00% (   0:00:00.00)
+
+Tiempo total: 370.9 segundos (6.18 minutos)
+Evidencia date fin: Fri Nov 13 09:09:24 AM CST 2026
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: /mnt/repos/pbrt-v3/f9-3.exr
+
+==============================================================================
+Renders correctos: 4 de 4
+Renders con errores: 0
+Fin: 2026-11-13T09:09:24-06:00
+Evidencia date fin: Fri Nov 13 09:09:24 AM CST 2026

@@ -1,0 +1,159 @@
+REPORTE DE RENDERS PBRT - WINDOWS NATIVO
+Acelerador configurado: KDTREE
+Inicio: 2026-11-12T02:58:08-06:00
+Directorio de trabajo: C:\Users\Jor\Documents\repos\pbrt-v3
+Archivo de resultados: C:\Users\Jor\Documents\repos\repo_diseño\resultados\tiempos_windows_kdtree_2.txt
+Orden aleatorio de esta ejecucion:
+  1. scenes\test_scenes\dragon\f9-3.pbrt
+  2. scenes\test_scenes\dragon\f8-4b.pbrt
+  3. scenes\test_scenes\dragon\f15-13.pbrt
+  4. scenes\test_scenes\dragon\f8-4a.pbrt
+
+==============================================================================
+RENDER 1 DE 4: f9-3.exr [KDTREE]
+Escena base: scenes\test_scenes\dragon\f9-3.pbrt
+Comando: .\build\Release\pbrt.exe scenes\test_scenes\dragon\f9-3_kdtree.pbrt
+Inicio: 2026-11-12T02:58:08-06:00
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  Integrator
+    Camera rays traced                                          829440000
+    Path length                                                     1.345 avg [range 0 - 20]
+    Zero-radiance paths                          350354822 /   1207119824 (29.02%)
+  Intersections
+    Regular ray intersection tests                             3086652830
+    Shadow ray intersection tests                               727053324
+    Ray-triangle intersection tests             2483993073 /  51993261691 (4.78%)
+  Memory
+    Film pixels                                                     24.72 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   2
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          1957941590
+Tiempo total: 1143.7 segundos (19.06 minutos)
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: C:\Users\Jor\Documents\repos\pbrt-v3\f9-3.exr
+
+==============================================================================
+RENDER 2 DE 4: f8-4b.exr [KDTREE]
+Escena base: scenes\test_scenes\dragon\f8-4b.pbrt
+Comando: .\build\Release\pbrt.exe scenes\test_scenes\dragon\f8-4b_kdtree.pbrt
+Inicio: 2026-11-12T03:16:32-06:00
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  Integrator
+    Camera rays traced                                         2621440000
+    Path length                                                     1.410 avg [range 0 - 22]
+    Zero-radiance paths                          429991363 /   2167860081 (19.83%)
+  Intersections
+    Regular ray intersection tests                             8325582146
+    Shadow ray intersection tests                              1558114086
+    Ray-triangle intersection tests             7584507755 / 111285627907 (6.82%)
+  Memory
+    Film pixels                                                     19.53 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          3883196245
+Tiempo total: 1069.6 segundos (17.83 minutos)
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: C:\Users\Jor\Documents\repos\pbrt-v3\f8-4b.exr
+
+==============================================================================
+RENDER 3 DE 4: f15-13.exr [KDTREE]
+Escena base: scenes\test_scenes\dragon\f15-13.pbrt
+Comando: .\build\Release\pbrt.exe scenes\test_scenes\dragon\f15-13_kdtree.pbrt
+Inicio: 2026-11-12T03:34:22-06:00
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  Integrator
+    Camera rays traced                                         4478976000
+    Path length                                                     1.183 avg [range 0 - 2]
+    Zero-radiance paths                         1390609961 /   5423243724 (25.64%)
+  Intersections
+    Regular ray intersection tests                            18316748598
+    Shadow ray intersection tests                              4008147214
+    Ray-triangle intersection tests            14410055736 / 345404945337 (4.17%)
+  Memory
+    Film pixels                                                     33.37 MiB
+    Primitives                                                     253.87 MiB
+    Texture MIP maps                                                 8.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                289.13 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                3697206
+    Probes per TransformCache lookup                                1.000 avg [range 1 - 1]
+    TransformCache hits                                  1 /            8 (12.50%)
+    Triangles per triangle mesh                    3697206 /            3 (1232402.00x)
+  Texture
+    Trilinear lookups                                         10033056395
+Tiempo total: 4207.4 segundos (70.12 minutos)
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: C:\Users\Jor\Documents\repos\pbrt-v3\f15-13.exr
+
+==============================================================================
+RENDER 4 DE 4: f8-4a.exr [KDTREE]
+Escena base: scenes\test_scenes\dragon\f8-4a.pbrt
+Comando: .\build\Release\pbrt.exe scenes\test_scenes\dragon\f8-4a_kdtree.pbrt
+Inicio: 2026-11-12T04:44:29-06:00
+
+ESTADISTICAS FINALES DE PBRT:
+Statistics:
+  Integrator
+    Camera rays traced                                         1310720000
+    Path length                                                     1.403 avg [range 0 - 10]
+    Zero-radiance paths                          166273023 /   1125598443 (14.77%)
+  Intersections
+    Regular ray intersection tests                             4194197893
+    Shadow ray intersection tests                               809003094
+    Ray-triangle intersection tests             3174762817 /  49458740960 (6.42%)
+  Memory
+    Film pixels                                                     19.53 MiB
+    Primitives                                                     126.93 MiB
+    Texture MIP maps                                                24.00 MiB
+    TransformCache                                                 260.00 kB
+    Triangle meshes                                                144.56 MiB
+  Scene
+    Lights                                                              1
+    Materials created                                                   3
+    Shapes created                                                1848604
+    Probes per TransformCache lookup                                1.167 avg [range 1 - 2]
+    TransformCache hits                                  1 /            6 (16.67%)
+    Triangles per triangle mesh                    1848604 /            2 (924302.00x)
+  Texture
+    Trilinear lookups                                          2333050515
+Tiempo total: 492.7 segundos (8.21 minutos)
+Codigo de salida: 0
+Estado: CORRECTO
+Archivo de imagen esperado: C:\Users\Jor\Documents\repos\pbrt-v3\f8-4a.exr
+
+==============================================================================
+Renders correctos: 4 de 4
+Renders con errores: 0
+Fin: 2026-11-12T04:52:02-06:00

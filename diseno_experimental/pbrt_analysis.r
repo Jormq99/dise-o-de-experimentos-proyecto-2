@@ -17,6 +17,13 @@
 #------------------------- 0. Instalación de paquetes requeridos. -------------------------
 print("#------------------------- 0. Instalación de paquetes requeridos. -------------------------")
 
+# Para mostrar los gráficos en navegador. En la consola de R, ejecutar:
+# install.packages("httpgd") --> Para instalar el paquete.
+# library(httpgd) --> Para cargarlo.
+# hgd() --> Para que inicie el web socket.
+# hgd_close() --> Para cerrar la sesión.
+
+
 waitForGraph <- function(seconds = 3) {
   
   if (interactive()) {
@@ -456,42 +463,344 @@ print("----- ftable -----")
 
 #------------------------- 2. Gráficos Simples de Interacción. -------------------------
 print("#------------------------- 2. Gráficos Simples de Interacción. -------------------------")
- 
+
 # Líneas paralelas sugieren ausencia de interacción; líneas que se cruzan o se separan sugieren interacción.
 # Son exploratorios: la significancia de cada interacción se evalúa con el ANOVA (sección 3).
- 
-# 2.1 Configuración x Acelerador (pregunta principal: ¿el efecto del acelerador depende del entorno?).
+
+# 2.1 Configuración x Acelerador.
 interaction.plot(x.factor = Data$Acelerador, trace.factor = Data$Configuracion, response = Data$Tiempo,
 fun = mean, type = "b", col = 1:9, pch = c(15:19, 15:18), fixed = TRUE, leg.bty = "o",
-xlab = "Acelerador", ylab = "Tiempo promedio (s)", trace.label = "Configuración")
-waitForGraph()
- 
-# 2.2 Escena x Configuración (¿el efecto del entorno se mantiene en todas las escenas?).
+xlab = "Acelerador", ylab = "Tiempo promedio (s)", trace.label = "Configuración",
+main = "Interacción Configuración x Acelerador")
+
+# 2.2 Escena x Configuración.
 interaction.plot(x.factor = Data$Escena, trace.factor = Data$Configuracion, response = Data$Tiempo,
 fun = mean, type = "b", col = 1:9, pch = c(15:19, 15:18), fixed = TRUE, leg.bty = "o",
-xlab = "Escena", ylab = "Tiempo promedio (s)", trace.label = "Configuración")
-waitForGraph()
- 
-# 2.3 Escena x Acelerador (¿la ventaja de bvh sobre kdtree depende de la escena?).
+xlab = "Escena", ylab = "Tiempo promedio (s)", trace.label = "Configuración",
+main = "Interacción Escena x Configuración")
+
+# 2.3 Escena x Acelerador.
 interaction.plot(x.factor = Data$Escena, trace.factor = Data$Acelerador, response = Data$Tiempo,
 fun = mean, type = "b", col = c("black", "red"), pch = c(19, 17), fixed = TRUE, leg.bty = "o",
-xlab = "Escena", ylab = "Tiempo promedio (s)", trace.label = "Acelerador")
-waitForGraph()
- 
-# 2.4 Entorno x Compilador, solo entornos Linux (¿la diferencia GCC vs Clang depende del entorno?).
+xlab = "Escena", ylab = "Tiempo promedio (s)", trace.label = "Acelerador",
+main = "Interacción Escena x Acelerador")
+
+# 2.4 Entorno x Compilador (solo entornos Linux).
 interaction.plot(x.factor = DataLinux$Entorno, trace.factor = DataLinux$Compilador, response = DataLinux$Tiempo,
 fun = mean, type = "b", col = c("black", "red"), pch = c(19, 17), fixed = TRUE, leg.bty = "o",
-xlab = "Entorno", ylab = "Tiempo promedio (s)", trace.label = "Compilador")
-waitForGraph()
- 
-# 2.5 Compilador x Acelerador, solo entornos Linux (¿el compilador afecta distinto a cada acelerador?).
+xlab = "Entorno", ylab = "Tiempo promedio (s)", trace.label = "Compilador",
+main = "Interacción Entorno x Compilador (entornos Linux)")
+
+# 2.5 Compilador x Acelerador (solo entornos Linux).
 interaction.plot(x.factor = DataLinux$Acelerador, trace.factor = DataLinux$Compilador, response = DataLinux$Tiempo,
 fun = mean, type = "b", col = c("black", "red"), pch = c(19, 17), fixed = TRUE, leg.bty = "o",
-xlab = "Acelerador", ylab = "Tiempo promedio (s)", trace.label = "Compilador")
-waitForGraph()
- 
-# 2.6 Repetición x Configuración (control: si el bloque Repetición no influye, las líneas deben ser planas).
+xlab = "Acelerador", ylab = "Tiempo promedio (s)", trace.label = "Compilador",
+main = "Interacción Compilador x Acelerador (entornos Linux)")
+
+# 2.6 Repetición x Configuración (control del bloque).
 interaction.plot(x.factor = Data$Repeticion, trace.factor = Data$Configuracion, response = Data$Tiempo,
 fun = mean, type = "b", col = 1:9, pch = c(15:19, 15:18), fixed = TRUE, leg.bty = "o",
-xlab = "Repetición", ylab = "Tiempo promedio (s)", trace.label = "Configuración")
-waitForGraph()
+xlab = "Repetición", ylab = "Tiempo promedio (s)", trace.label = "Configuración",
+main = "Interacción Repetición x Configuración (control de bloque)")
+
+#------------------------- 3. Modelo Lineal y Anova. -------------------------
+print("#------------------------- 3. Modelo Lineal y Anova. -------------------------")
+
+# Modelo A (global): Configuración (Entorno + Compilador) x Acelerador x Escena, con Repetición como bloque.
+# Repetición entra solo como efecto aditivo (bloque): no se modelan sus interacciones.
+modelA <- lm(Tiempo ~ Configuracion * Acelerador * Escena + Repeticion, data = Data)
+print(summary(modelA))
+library(car)
+print(Anova(modelA, type = "II"))
+
+# Modelo B (solo entornos Linux): factorial completo Entorno x Compilador x Acelerador x Escena.
+modelB <- lm(Tiempo ~ Entorno * Compilador * Acelerador * Escena + Repeticion, data = DataLinux)
+print(summary(modelB))
+print(Anova(modelB, type = "II"))
+
+#------------------------- 4. Análisis de Supuestos. -------------------------
+print("#------------------------- 4. Análisis de Supuestos. -------------------------")
+# Los supuestos se analizan sobre los residuos del modelo lineal, por eso se evalúan después de ajustarlo.
+# Criterio de decisión en las pruebas formales: alfa = 0.05.
+
+library(rcompanion)
+library(car)
+library(lmtest)
+
+# 4.1 Normalidad de los residuos: histograma con curva normal, gráfico Q-Q y prueba de Shapiro-Wilk.
+# H0: los residuos siguen una distribución normal.
+verificarNormalidad <- function(model, titulo = "Modelo", alfa = 0.05) {
+  x <- residuals(model)
+  plotNormalHistogram(x, main = paste("Histograma de residuos -", titulo), xlab = "Residuos")
+  qqPlot(x, main = paste("Gráfico Q-Q de residuos -", titulo), ylab = "Residuos", id = FALSE)
+  prueba <- shapiro.test(x)
+  print(prueba)
+  if (prueba$p.value < alfa) {
+    print(paste0("[", titulo, "] Normalidad: se rechaza H0 (p = ", signif(prueba$p.value, 4), "). Los residuos no son normales."))
+  } else {
+    print(paste0("[", titulo, "] Normalidad: no se rechaza H0 (p = ", signif(prueba$p.value, 4), "). Supuesto razonable."))
+  }
+  invisible(prueba)
+}
+
+# 4.2 Homocedasticidad: residuos vs. valores ajustados y prueba de Levene entre las celdas de tratamiento.
+# H0: la varianza de los residuos es igual en todos los grupos.
+# 'grupos' debe ser el factor de celdas de tratamiento (sin Repetición, para que cada grupo tenga 5 réplicas).
+verificarHomocedasticidad <- function(model, grupos, titulo = "Modelo", alfa = 0.05) {
+  plot(fitted(model), residuals(model), main = paste("Residuos vs. ajustados -", titulo),
+       xlab = "Valores ajustados", ylab = "Residuos", pch = 19, col = "gray30")
+  abline(h = 0, col = "red", lty = 2)
+  prueba <- leveneTest(residuals(model) ~ grupos)
+  print(prueba)
+  p <- prueba[["Pr(>F)"]][1]
+  if (p < alfa) {
+    print(paste0("[", titulo, "] Homocedasticidad: se rechaza H0 (p = ", signif(p, 4), "). Varianzas no homogéneas."))
+  } else {
+    print(paste0("[", titulo, "] Homocedasticidad: no se rechaza H0 (p = ", signif(p, 4), "). Supuesto razonable."))
+  }
+  invisible(prueba)
+}
+
+# 4.3 Independencia: residuos en el orden de ejecución y prueba de Durbin-Watson.
+# H0: no hay autocorrelación de primer orden entre residuos consecutivos.
+# 'orden' es el orden real de ejecución de las corridas. Si no se indica, se usa el orden de las filas.
+verificarIndependencia <- function(model, orden = NULL, titulo = "Modelo", alfa = 0.05) {
+  if (is.null(orden)) { orden <- seq_along(residuals(model)) }
+  plot(orden, residuals(model)[order(orden)], type = "b", pch = 19, cex = 0.6,
+       main = paste("Residuos vs. orden de ejecución -", titulo), xlab = "Orden de ejecución", ylab = "Residuos")
+  abline(h = 0, col = "red", lty = 2)
+  prueba <- dwtest(model, order.by = orden)
+  print(prueba)
+  if (prueba$p.value < alfa) {
+    print(paste0("[", titulo, "] Independencia: se rechaza H0 (p = ", signif(prueba$p.value, 4), "). Hay autocorrelación."))
+  } else {
+    print(paste0("[", titulo, "] Independencia: no se rechaza H0 (p = ", signif(prueba$p.value, 4), "). Supuesto razonable."))
+  }
+  invisible(prueba)
+}
+
+# Grupos (celdas de tratamiento) para la prueba de Levene de cada modelo.
+gruposA <- interaction(Data$Configuracion, Data$Acelerador, Data$Escena, drop = TRUE)
+gruposB <- interaction(DataLinux$Entorno, DataLinux$Compilador, DataLinux$Acelerador, DataLinux$Escena, drop = TRUE)
+
+# 4.4 Aplicación sobre los datos originales (sin transformar).
+verificarNormalidad(modelA, titulo = "Modelo A (original)")
+verificarHomocedasticidad(modelA, gruposA, titulo = "Modelo A (original)")
+verificarIndependencia(modelA, titulo = "Modelo A (original)")
+
+verificarNormalidad(modelB, titulo = "Modelo B (original)")
+verificarHomocedasticidad(modelB, gruposB, titulo = "Modelo B (original)")
+verificarIndependencia(modelB, titulo = "Modelo B (original)")
+
+# Gráficos diagnósticos estándar de R (complemento).
+#plot(modelA)
+#plot(modelB)
+
+#------------------------- 5. Transformación de Datos. -------------------------
+print("#------------------------- 5. Transformación de Datos. -------------------------")
+# Si los supuestos no se cumplen con los datos originales, se aplican transformaciones de menor a mayor
+# agresividad: raíz cuadrada -> raíz cúbica -> logaritmo.
+
+# 5.1 Función de transformación de la variable respuesta.
+transformar <- function(y, tipo = c("sqrt", "cub", "log")) {
+  tipo <- match.arg(tipo)
+  switch(tipo,
+    sqrt = sqrt(y),
+    cub  = sign(y) * abs(y)^(1/3),
+    log  = log(y))
+}
+
+# 5.2 Función que ajusta el modelo con la respuesta transformada, imprime el ANOVA tipo II
+# y evalúa los supuestos con las funciones de la sección 4.
+# 'formula' es la del modelo original; solo se reemplaza la variable respuesta.
+evaluarTransformacion <- function(formula, datos, grupos, tipo, titulo = "Modelo", orden = NULL, alfa = 0.05) {
+  nombre <- switch(tipo, sqrt = "Raíz cuadrada", cub = "Raíz cúbica", log = "Logaritmo")
+  etiqueta <- paste0(titulo, " (", nombre, ")")
+  print(paste("------------------------- Transformación:", etiqueta, "-------------------------"))
+
+  respuesta <- all.vars(formula)[1]
+  datos$T_resp <- transformar(datos[[respuesta]], tipo)
+  model <- lm(update(formula, T_resp ~ .), data = datos)
+  print(Anova(model, type = "II"))
+
+  pN <- verificarNormalidad(model, titulo = etiqueta, alfa = alfa)$p.value
+  pH <- verificarHomocedasticidad(model, grupos, titulo = etiqueta, alfa = alfa)[["Pr(>F)"]][1]
+  pI <- verificarIndependencia(model, orden = orden, titulo = etiqueta, alfa = alfa)$p.value
+
+  invisible(list(tipo = tipo, model = model, p = c(Normalidad = pN, Homocedasticidad = pH, Independencia = pI), cumple = (pN >= alfa) & (pH >= alfa)))
+}
+
+# 5.3 Función que prueba las transformaciones en orden y se detiene en la primera suficiente.
+# Criterio: normalidad y homocedasticidad.
+seleccionarTransformacion <- function(formula, datos, grupos, titulo = "Modelo", orden = NULL, alfa = 0.05) {
+  resumen <- data.frame()
+  for (tipo in c("sqrt", "cub", "log")) {
+    res <- evaluarTransformacion(formula, datos, grupos, tipo, titulo, orden, alfa)
+    resumen <- rbind(resumen, data.frame(Transformacion = tipo, t(signif(res$p, 4)), Cumple = res$cumple))
+    if (res$cumple) {
+      print(paste0("[", titulo, "] Transformación seleccionada: ", tipo, " (la menos agresiva que cumple los supuestos)."))
+      print(resumen)
+      return(invisible(res))
+    }
+  }
+  print(paste0("[", titulo, "] Ninguna transformación cumple ambos supuestos. ", "Considerar ANOVA robusto/no paramétrico (p. ej. ART) y reportarlo como limitación."))
+  print(resumen)
+  invisible(res)
+}
+
+# 5.4 Aplicación. Solo se ejecuta si los supuestos fallaron con los datos originales (sección 4).
+library(car)
+transA <- seleccionarTransformacion(formula(modelA), Data, gruposA, titulo = "Modelo A")
+transB <- seleccionarTransformacion(formula(modelB), DataLinux, gruposB, titulo = "Modelo B")
+
+# Modelos finales que se usarán en el post-hoc y los gráficos finales.
+modelA_final <- transA$model
+modelB_final <- transB$model
+
+#------------------------- 6. Análisis Post-Hoc. -------------------------
+print("#------------------------- 6. Análisis Post-Hoc. -------------------------")
+library(lsmeans)
+library(emmeans)
+library(multcomp)
+
+# Tipo de transformación seleccionada en la sección 5 ("none" si no hizo falta transformar).
+tipoA <- if (exists("transA") && transA$cumple) transA$tipo else "none"
+tipoB <- if (exists("transB") && transB$cumple) transB$tipo else "none"
+if (!exists("modelA_final")) { modelA_final <- modelA }
+if (!exists("modelB_final")) { modelB_final <- modelB }
+
+gridTransformado <- function(model, tipo) {
+  rg <- ref_grid(model)
+  if (tipo == "none") return(rg)
+  update(rg, tran = switch(tipo,
+    sqrt = "sqrt",
+    cub  = make.tran("power", 1/3),
+    log  = "log"))
+}
+
+gridA <- gridTransformado(modelA_final, tipoA)
+gridB <- gridTransformado(modelB_final, tipoB)
+
+# 6.2 Configuración dentro de cada Acelerador (Modelo A).
+marginal <- lsmeans(gridA, pairwise ~ Configuracion | Acelerador, adjust = "tukey")
+print(marginal)
+print(cld(marginal$lsmeans, alpha = 0.05, Letters = letters, adjust = "tukey"))
+
+# 6.3 Acelerador dentro de cada Configuración (Modelo A): ¿bvh es más rápido en todos los entornos?
+marginal <- lsmeans(gridA, pairwise ~ Acelerador | Configuracion, adjust = "tukey")
+print(marginal)
+
+# 6.4 Compilador dentro de cada Entorno y Acelerador (Modelo B, solo Linux): GCC vs Clang.
+marginal <- lsmeans(gridB, pairwise ~ Compilador | Entorno * Acelerador, adjust = "tukey")
+print(marginal)
+
+# 6.5 Entorno dentro de cada Compilador y Acelerador (Modelo B): nativo vs WSL vs Hyper-V vs VirtualBox.
+marginal <- lsmeans(gridB, pairwise ~ Entorno | Compilador * Acelerador, adjust = "tukey")
+print(marginal)
+print(cld(marginal$lsmeans, alpha = 0.05, Letters = letters, adjust = "tukey"))
+
+# 6.6 Solo si la transformación es logarítmica: las diferencias se expresan como RAZONES de tiempo
+#     (p. ej. 1.42 = 42% más lento), con intervalos de confianza al 95%. Base para la relevancia práctica.
+if (tipoA == "log") {
+  print(confint(pairs(lsmeans(gridA, ~ Configuracion | Acelerador), adjust = "tukey"), type = "response"))
+}
+if (tipoB == "log") {
+  print(confint(pairs(lsmeans(gridB, ~ Compilador | Entorno * Acelerador)), type = "response"))
+}
+
+#------------------------- 7. Gráficos de Promedios. -------------------------
+print("#------------------------- 7. Gráficos de Promedios. -------------------------")
+# Promedios y error estándar en la escala usada para el análisis (transformada, si aplica).
+
+library(FSA)
+library(ggplot2)
+
+etiquetaY <- function(tipo) {
+  switch(tipo, none = "Tiempo (s)", sqrt = "Raíz cuadrada del tiempo",
+         cub = "Raíz cúbica del tiempo", log = "Logaritmo del tiempo")
+}
+
+Data$T_final      <- if (tipoA == "none") Data$Tiempo else transformar(Data$Tiempo, tipoA)
+DataLinux$T_final <- if (tipoB == "none") DataLinux$Tiempo else transformar(DataLinux$Tiempo, tipoB)
+
+pd <- position_dodge(0.4)
+
+# 7.1 Configuración x Acelerador (Modelo A).
+Sum <- Summarize(T_final ~ Configuracion + Acelerador, data = Data, digits = 3)
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits = 3)
+print(Sum)
+
+igc <- ggplot(Sum, aes(x = Configuracion, y = mean, color = Acelerador)) +
+geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, linewidth = 0.7, position = pd) +
+geom_point(shape = 15, size = 4, position = pd) + theme_bw() +
+theme(axis.title = element_text(face = "bold"), axis.text.x = element_text(angle = 45, hjust = 1)) +
+scale_colour_manual(values = c("black", "red")) + ylab(etiquetaY(tipoA)) +
+ggtitle("Promedio por Configuración y Acelerador")
+print(igc)
+
+# 7.2 Configuración x Acelerador, separado por Escena (¿el patrón se repite en cada escena?).
+# Summarize() admite máximo dos factores, por lo que se calcula por escena y luego se unen los resultados.
+Sum <- do.call(rbind, lapply(levels(Data$Escena), function(e) {
+  s <- Summarize(T_final ~ Configuracion + Acelerador, data = droplevels(subset(Data, Escena == e)), digits = 3)
+  s$Escena <- e
+  s
+}))
+Sum$Escena <- factor(Sum$Escena, levels = levels(Data$Escena))
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits = 3)
+print(Sum)
+
+igc <- ggplot(Sum, aes(x = Configuracion, y = mean, color = Acelerador)) +
+geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, linewidth = 0.7, position = pd) +
+geom_point(shape = 15, size = 3, position = pd) + theme_bw() + facet_wrap(~ Escena, scales = "free_y") +
+theme(axis.title = element_text(face = "bold"), axis.text.x = element_text(angle = 45, hjust = 1)) +
+scale_colour_manual(values = c("black", "red")) + ylab(etiquetaY(tipoA)) +
+ggtitle("Promedio por Configuración y Acelerador, según Escena")
+print(igc)
+
+# 7.3 Entorno x Compilador (Modelo B, solo Linux).
+Sum <- Summarize(T_final ~ Entorno + Compilador, data = DataLinux, digits = 3)
+Sum$se = Sum$sd / sqrt(Sum$n)
+Sum$se = signif(Sum$se, digits = 3)
+print(Sum)
+
+igc <- ggplot(Sum, aes(x = Entorno, y = mean, color = Compilador)) +
+geom_errorbar(aes(ymin = mean - se, ymax = mean + se), width = 0.2, linewidth = 0.7, position = pd) +
+geom_point(shape = 15, size = 4, position = pd) + theme_bw() +
+theme(axis.title = element_text(face = "bold")) +
+scale_colour_manual(values = c("black", "red")) + ylab(etiquetaY(tipoB)) +
+ggtitle("Promedio por Entorno y Compilador (entornos Linux)")
+print(igc)
+
+#------------------------- 8. Gráfico de Datos Destransformados. -------------------------
+print("#------------------------- 8. Gráfico de Datos Destransformados. -------------------------")
+# Los promedios de mínimos cuadrados y sus IC se calculan en la escala transformada y se regresan
+# a segundos con la función inversa (type = "response"). No se destransforma la desviación estándar,
+# porque exp(sd), sd^2 o sd^3 no son una medida de dispersión válida en la escala original.
+# Nota: con log, el promedio destransformado es una media geométrica.
+
+graficoDestransformado <- function(grid, especificacion, x, color, titulo) {
+  CLD <- cld(lsmeans(grid, especificacion), alpha = 0.05, Letters = letters, adjust = "tukey", type = "response")
+  CLD <- as.data.frame(CLD)
+  colY <- intersect(c("response", "lsmean", "emmean"), names(CLD))[1]
+  CLD$.group = gsub(" ", "", CLD$.group)
+  print(CLD)
+
+  ggplot(CLD, aes(x = .data[[x]], y = .data[[colY]], color = .data[[color]], label = .group)) +
+  geom_point(shape = 15, size = 4, position = pd) +
+  geom_errorbar(aes(ymin = lower.CL, ymax = upper.CL), width = 0.2, linewidth = 0.7, position = pd) +
+  geom_text(aes(y = upper.CL), vjust = -0.6, position = pd, show.legend = FALSE) +
+  theme_bw() + scale_colour_manual(values = c("black", "red")) +
+  theme(axis.title = element_text(face = "bold"), axis.text = element_text(face = "bold"),
+        axis.text.x = element_text(angle = 45, hjust = 1)) +
+  ylab("Promedio de mínimos cuadrados\nTiempo de ejecución (s)") + ggtitle(titulo)
+}
+
+# 8.1 Configuración x Acelerador (Modelo A). Las letras comparan configuraciones dentro de cada acelerador.
+print(graficoDestransformado(gridA, ~ Configuracion | Acelerador, "Configuracion", "Acelerador",
+      "Tiempo de ejecución por Configuración y Acelerador (IC 95%)"))
+
+# 8.2 Entorno x Compilador (Modelo B). Las letras comparan entornos dentro de cada compilador.
+print(graficoDestransformado(gridB, ~ Entorno | Compilador, "Entorno", "Compilador",
+      "Tiempo de ejecución por Entorno y Compilador, entornos Linux (IC 95%)"))

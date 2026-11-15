@@ -157,11 +157,11 @@ Statistics:
   Texture
     Trilinear lookups                                         10033001752
   Profile
-    Integrator::Render()                                            99.98% (   0:28:24.93)
-      Camera::GenerateRay[Differential]()                            0.89% (   0:00:15.16)
-      Film::AddSample()                                              0.60% (   0:00:10.18)
+    Integrator::Render()                                            99.98% (   0:29:24.93)
+      Camera::GenerateRay[Differential]()                            0.89% (   0:00:25.16)
+      Film::AddSample()                                              0.60% (   0:00:20.18)
       Film::MergeTile()                                              0.00% (   0:00:00.00)
-      Sampler::GetSample[12]D()                                      1.77% (   0:00:30.21)
+      Sampler::GetSample[12]D()                                      1.77% (   0:00:50.21)
       Sampler::StartPixelSample()                                    0.00% (   0:00:00.00)
       SamplerIntegrator::Li()                                       96.13% (   0:27:19.23)
         Accelerator::Intersect()                                    20.45% (   0:05:48.67)
@@ -216,7 +216,7 @@ Statistics:
     Film::MergeTile()                                                0.00% (   0:00:00.00)
     MIP map generation                                               0.00% (   0:00:00.00)
 
-Tiempo total: 1705.2 segundos (28.42 minutos)
+Tiempo total: 1805.2 segundos (30.08 minutos)
 Evidencia date fin: sáb 07 nov 2026 01:46:17 CST
 Codigo de salida: 0
 Estado: CORRECTO
